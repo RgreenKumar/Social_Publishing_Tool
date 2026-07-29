@@ -1,0 +1,17 @@
+com\relay\api\store\InMemoryStore.class
+com\relay\api\post\PostController.class
+com\relay\api\store\InMemoryStore$Post.class
+com\relay\api\health\HealthController.class
+com\relay\api\post\PostController$PublishRequest.class
+com\relay\api\RelayApiApplication.class
+com\relay\api\store\InMemoryStore$User.class
+com\relay\api\config\CorsConfig.class
+com\relay\api\social\SocialAccountController$ConnectRequest.class
+com\relay\api\auth\AuthController.class
+com\relay\api\store\InMemoryStore$SocialAccount.class
+com\relay\api\config\CorsConfig$1.class
+com\relay\api\config\ApiExceptionHandler.class
+com\relay\api\auth\AuthController$LoginRequest.class
+com\relay\api\social\SocialAccountController.class
+com\relay\api\store\InMemoryStore$PlatformResult.class
+com\relay\api\auth\AuthController$SignupRequest.class

@@ -6,10 +6,30 @@ React talks to Spring Boot over HTTP. Spring Boot keeps users, accounts, and pos
 
 Needs **JDK 17+** only. This project includes a **Maven Wrapper** (`mvnw`).
 
+PostgreSQL must be running with database `postfusion_db` (see below).
+
 ```bash
 cd backend
 ./mvnw spring-boot:run
 ```
+
+### PostgreSQL
+
+Create DB (if not already):
+
+```sql
+CREATE DATABASE postfusion_db;
+```
+
+In `backend/.env`:
+
+```env
+DATABASE_URL=jdbc:postgresql://localhost:5432/postfusion_db
+DATABASE_USERNAME=postgres
+DATABASE_PASSWORD=your_postgres_password
+```
+
+Tables are created automatically on startup (`ddl-auto: update`).
 
 Windows CMD/PowerShell: `mvnw.cmd spring-boot:run`
 
