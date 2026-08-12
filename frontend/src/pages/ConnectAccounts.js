@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Navigate, useSearchParams } from "react-router-dom";
 import PlatformBadge from "../components/PlatformBadge";
 import { PLATFORMS, isLivePlatform } from "../data/mock";
-import { api, getStoredToken } from "../api";
+import { api, getStoredToken, isAdmin } from "../api";
 
 const BACKEND_URL =
   (process.env.REACT_APP_API_URL || "http://localhost:8080").replace(/\/$/, "");
@@ -14,11 +14,13 @@ function liveLabel(platform) {
 function connectHint(platform) {
   if (platform === "linkedin") return "Not connected — uses LinkedIn login";
   if (platform === "facebook") return "Not connected — uses configured Facebook Page";
+  if (platform === "instagram") return "Not connected — uses Instagram Business + Page token";
   if (platform === "threads") return "Not connected — uses configured Threads token";
   return "Not connected";
 }
 
 export default function ConnectAccounts() {
+  const admin = isAdmin();
   const [accounts, setAccounts] = useState([]);
   const [error, setError] = useState("");
   const [info, setInfo] = useState("");
@@ -31,10 +33,12 @@ export default function ConnectAccounts() {
   }
 
   useEffect(() => {
+    if (!admin) return;
     load().catch((err) => setError(err.message));
-  }, []);
+  }, [admin]);
 
   useEffect(() => {
+    if (!admin) return;
     const linkedin = searchParams.get("linkedin");
     const message = searchParams.get("message");
     if (!linkedin) return;
@@ -51,7 +55,11 @@ export default function ConnectAccounts() {
       setError(message || "LinkedIn connection failed");
     }
     setSearchParams({}, { replace: true });
-  }, [searchParams, setSearchParams]);
+  }, [admin, searchParams, setSearchParams]);
+
+  if (!admin) {
+    return <Navigate to="/app" replace />;
+  }
 
   async function toggle(acc) {
     setError("");
@@ -75,6 +83,8 @@ export default function ConnectAccounts() {
         });
         if (acc.platform === "facebook") {
           setInfo(`Facebook connected: ${connected.displayName || "Page"}`);
+        } else if (acc.platform === "instagram") {
+          setInfo(`Instagram connected: ${connected.displayName || "account"}`);
         } else if (acc.platform === "threads") {
           setInfo(`Threads connected: ${connected.displayName || "account"}`);
         }
@@ -92,8 +102,9 @@ export default function ConnectAccounts() {
       <p className="page__eyebrow">Accounts</p>
       <h1 className="page__title">Connected social accounts</h1>
       <p className="page__lead">
-        LinkedIn uses OAuth. Facebook and Threads use configured tokens.
-        Instagram is still simulated.
+        LinkedIn uses OAuth. Facebook and Instagram use your Page token; Threads
+        uses its own token. Instagram needs an image (staged via Facebook when
+        PUBLIC_BASE_URL is not set).
       </p>
 
       {error && <p className="form-error">{error}</p>}

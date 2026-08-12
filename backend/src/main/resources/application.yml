@@ -1,0 +1,46 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: postfusion-api
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/postfusion_db}
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 12MB
+
+relay:
+  cors:
+    allowed-origins: http://localhost:3000,http://localhost:3001,http://127.0.0.1:3000,http://127.0.0.1:3001
+  frontend-url: ${FRONTEND_URL:http://localhost:3000}
+  linkedin:
+    client-id: ${LINKEDIN_CLIENT_ID:}
+    client-secret: ${LINKEDIN_CLIENT_SECRET:}
+    redirect-uri: ${LINKEDIN_REDIRECT_URI:http://localhost:8080/api/oauth/linkedin/callback}
+    scopes: ${LINKEDIN_SCOPES:openid profile email w_member_social}
+  facebook:
+    page-id: ${FACEBOOK_PAGE_ID:}
+    page-access-token: ${FACEBOOK_PAGE_ACCESS_TOKEN:}
+    user-access-token: ${FACEBOOK_USER_ACCESS_TOKEN:}
+    graph-version: ${FACEBOOK_GRAPH_VERSION:v21.0}
+  instagram:
+    business-account-id: ${INSTAGRAM_BUSINESS_ACCOUNT_ID:}
+    public-base-url: ${PUBLIC_BASE_URL:}
+  threads:
+    user-id: ${THREADS_USER_ID:}
+    access-token: ${THREADS_ACCESS_TOKEN:}
+    api-version: ${THREADS_API_VERSION:v1.0}
+    public-base-url: ${PUBLIC_BASE_URL:}

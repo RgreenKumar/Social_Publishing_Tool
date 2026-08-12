@@ -193,6 +193,16 @@
   background: color-mix(in srgb, var(--amber) 18%, white);
 }
 
+.status-pill--scheduled {
+  color: #0b5fff;
+  background: color-mix(in srgb, #0b5fff 12%, white);
+}
+
+.status-pill--processing {
+  color: var(--amber-deep);
+  background: color-mix(in srgb, var(--amber) 18%, white);
+}
+
 .grid-2 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -759,6 +769,102 @@
   font: inherit;
   color: var(--ink);
   background: white;
+}
+
+.compose__when {
+  margin: 1rem 0 0.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.compose__when-label {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.compose__when-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.45rem;
+  padding: 0.3rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--cobalt) 4%, white);
+}
+
+.compose__when-tab {
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 0.7rem 0.75rem;
+  border-radius: calc(var(--radius-sm) - 2px);
+  font: inherit;
+  font-weight: 700;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition:
+    background 0.25s var(--ease),
+    color 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
+}
+
+.compose__when-tab:hover {
+  color: var(--ink);
+}
+
+.compose__when-tab--on {
+  background: white;
+  color: var(--cobalt);
+  box-shadow: 0 6px 16px rgba(47, 107, 255, 0.12);
+}
+
+.compose__schedule-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--cobalt) 22%, var(--line));
+  border-radius: var(--radius-sm);
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--cobalt) 7%, white),
+    white 70%
+  );
+}
+
+.compose__schedule-field {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.compose__schedule-card input[type="datetime-local"] {
+  width: 100%;
+  max-width: none;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font: inherit;
+  color: var(--ink);
+  background: white;
+}
+
+.compose__schedule-card input[type="datetime-local"]:focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--cobalt) 55%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cobalt) 16%, transparent);
+}
+
+.compose__schedule-hint {
+  margin: 0.15rem 0 0;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  line-height: 1.4;
 }
 
 .compose__preview {

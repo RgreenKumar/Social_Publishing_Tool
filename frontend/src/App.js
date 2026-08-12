@@ -8,6 +8,10 @@ import Dashboard from "./pages/Dashboard";
 import ConnectAccounts from "./pages/ConnectAccounts";
 import Compose from "./pages/Compose";
 import History from "./pages/History";
+import Scheduled from "./pages/Scheduled";
+import Team from "./pages/Team";
+import Approvals from "./pages/Approvals";
+import MyRequests from "./pages/MyRequests";
 import "./App.css";
 
 function App() {
@@ -23,6 +27,10 @@ function App() {
             <Route path="compose" element={<Compose />} />
             <Route path="accounts" element={<ConnectAccounts />} />
             <Route path="history" element={<History />} />
+            <Route path="scheduled" element={<Scheduled />} />
+            <Route path="team" element={<Team />} />
+            <Route path="approvals" element={<Approvals />} />
+            <Route path="requests" element={<MyRequests />} />
           </Route>
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />

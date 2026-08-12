@@ -5,7 +5,7 @@ import { api, saveSession } from "../api";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -15,7 +15,7 @@ export default function Login() {
     setError("");
     setLoading(true);
     try {
-      const data = await api.login({ email, password });
+      const data = await api.login({ login, password });
       saveSession(data);
       navigate("/app");
     } catch (err) {
@@ -32,18 +32,20 @@ export default function Login() {
           <BrandLogo size={34} />
         </Link>
         <h1 className="auth__title">Welcome back</h1>
-        <p className="auth__lead">One Click, Every Platform</p>
+        <p className="auth__lead">
+          Admin: use email. Team member: use username.
+        </p>
 
         <form onSubmit={handleSubmit} autoComplete="off">
           <div className="field">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="login">Email or username</label>
             <input
-              id="email"
-              name="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="off"
+              id="login"
+              name="login"
+              type="text"
+              value={login}
+              onChange={(e) => setLogin(e.target.value)}
+              autoComplete="username"
               required
             />
           </div>
@@ -71,7 +73,7 @@ export default function Login() {
         </form>
 
         <p className="auth__switch">
-          New here? <Link to="/signup">Create an account</Link>
+          New admin? <Link to="/signup">Create an admin account</Link>
         </p>
       </div>
     </div>

@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PlatformBadge from "../components/PlatformBadge";
-import { api, getStoredUser } from "../api";
+import { api, getStoredUser, isAdmin } from "../api";
 
 export default function Dashboard() {
   const user = getStoredUser();
+  const admin = isAdmin();
   const [accounts, setAccounts] = useState([]);
   const [posts, setPosts] = useState([]);
+  const [teamStats, setTeamStats] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -14,13 +16,17 @@ export default function Dashboard() {
     let cancelled = false;
     async function load() {
       try {
-        const [acc, postList] = await Promise.all([
-          api.listAccounts(),
-          api.listPosts(),
-        ]);
+        const requests = [api.listAccounts(), api.listPosts()];
+        if (admin) {
+          requests.push(api.teamPublishStats());
+        }
+        const results = await Promise.all(requests);
         if (!cancelled) {
-          setAccounts(acc);
-          setPosts(postList);
+          setAccounts(results[0]);
+          setPosts(results[1]);
+          if (admin) {
+            setTeamStats(results[2] || []);
+          }
         }
       } catch (err) {
         if (!cancelled) setError(err.message);
@@ -32,7 +38,7 @@ export default function Dashboard() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [admin]);
 
   const connected = accounts.filter((a) => a.connected).length;
   const successCount = posts.reduce(
@@ -42,6 +48,10 @@ export default function Dashboard() {
   const totalAttempts = posts.reduce((n, p) => n + p.platforms.length, 0);
   const successRate =
     totalAttempts === 0 ? "—" : `${Math.round((successCount / totalAttempts) * 100)}%`;
+  const teamPublishedTotal = teamStats.reduce(
+    (n, m) => n + (Number(m.publishedCount) || 0),
+    0
+  );
 
   return (
     <div className="page fade-rise">
@@ -72,6 +82,49 @@ export default function Dashboard() {
               <p className="stat__value">{successRate}</p>
             </div>
           </div>
+
+          {admin && (
+            <div className="panel fade-rise fade-rise-delay-1" style={{ marginTop: "1rem" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "0.85rem",
+                  gap: "0.75rem",
+                  flexWrap: "wrap",
+                }}
+              >
+                <h2 style={{ fontSize: "1.15rem" }}>Team member publishes</h2>
+                <span className="list-item__meta">
+                  {teamPublishedTotal} total approved
+                </span>
+              </div>
+              {teamStats.length === 0 ? (
+                <p className="list-item__meta">
+                  No team members yet.{" "}
+                  <Link to="/app/team">Add members</Link> to track their publishes.
+                </p>
+              ) : (
+                teamStats.map((member) => (
+                  <div key={member.id} className="list-item">
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p className="list-item__title">{member.name}</p>
+                      <p className="list-item__meta">@{member.username}</p>
+                    </div>
+                    <div style={{ textAlign: "right" }}>
+                      <p className="stat__value" style={{ fontSize: "1.45rem", margin: 0 }}>
+                        {Number(member.publishedCount) || 0}
+                      </p>
+                      <p className="list-item__meta" style={{ margin: 0 }}>
+                        published
+                      </p>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
 
           <div className="dashboard__row fade-rise fade-rise-delay-2">
             <div className="panel">
@@ -121,9 +174,20 @@ export default function Dashboard() {
                 <Link to="/app/compose" className="btn btn--primary">
                   Compose new post
                 </Link>
-                <Link to="/app/accounts" className="btn btn--ghost">
-                  Manage connected accounts
-                </Link>
+                {admin ? (
+                  <>
+                    <Link to="/app/team" className="btn btn--ghost">
+                      Manage team
+                    </Link>
+                    <Link to="/app/accounts" className="btn btn--ghost">
+                      Manage connected accounts
+                    </Link>
+                  </>
+                ) : (
+                  <Link to="/app/requests" className="btn btn--ghost">
+                    My approval requests
+                  </Link>
+                )}
               </div>
             </div>
           </div>

@@ -7,6 +7,7 @@ com\relay\api\RelayApiApplication.class
 com\relay\api\store\InMemoryStore$User.class
 com\relay\api\config\CorsConfig.class
 com\relay\api\social\SocialAccountController$ConnectRequest.class
+com\relay\api\instagram\InstagramService.class
 com\relay\api\auth\AuthController.class
 com\relay\api\store\InMemoryStore$SocialAccount.class
 com\relay\api\config\CorsConfig$1.class

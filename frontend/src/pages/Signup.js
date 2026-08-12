@@ -32,8 +32,10 @@ export default function Signup() {
         <Link to="/" className="auth__brand">
           <BrandLogo size={34} />
         </Link>
-        <h1 className="auth__title">Create your account</h1>
-        <p className="auth__lead">One Click, Every Platform</p>
+        <h1 className="auth__title">Create admin account</h1>
+        <p className="auth__lead">
+          Sign up as Admin, then add team members from the Team page.
+        </p>
 
         <form onSubmit={handleSubmit} autoComplete="off">
           <div className="field">

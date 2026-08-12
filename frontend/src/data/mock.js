@@ -25,7 +25,7 @@ export const PLATFORMS = [
   },
 ];
 
-export const LIVE_PLATFORMS = new Set(["linkedin", "facebook", "threads"]);
+export const LIVE_PLATFORMS = new Set(["linkedin", "facebook", "instagram", "threads"]);
 
 export function isLivePlatform(id) {
   return LIVE_PLATFORMS.has(id);

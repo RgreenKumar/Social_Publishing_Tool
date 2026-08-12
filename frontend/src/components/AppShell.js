@@ -1,18 +1,31 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import BrandLogo from "./BrandLogo";
-import { api, clearSession, getStoredUser } from "../api";
+import ScheduledPublishNotifier from "./ScheduledPublishNotifier";
+import { api, clearSession, getStoredUser, isAdmin } from "../api";
 import "./AppShell.css";
-
-const NAV = [
-  { to: "/app", end: true, label: "Overview" },
-  { to: "/app/compose", label: "Compose" },
-  { to: "/app/accounts", label: "Accounts" },
-  { to: "/app/history", label: "History" },
-];
 
 export default function AppShell() {
   const navigate = useNavigate();
   const user = getStoredUser();
+  const admin = isAdmin();
+
+  const nav = admin
+    ? [
+        { to: "/app", end: true, label: "Overview" },
+        { to: "/app/compose", label: "Compose" },
+        { to: "/app/accounts", label: "Accounts" },
+        { to: "/app/history", label: "History" },
+        { to: "/app/scheduled", label: "Scheduled" },
+        { to: "/app/team", label: "Team" },
+        { to: "/app/approvals", label: "Approvals" },
+      ]
+    : [
+        { to: "/app", end: true, label: "Overview" },
+        { to: "/app/compose", label: "Compose" },
+        { to: "/app/history", label: "History" },
+        { to: "/app/scheduled", label: "Scheduled" },
+        { to: "/app/requests", label: "My requests" },
+      ];
 
   async function handleSignOut() {
     try {
@@ -36,7 +49,7 @@ export default function AppShell() {
         </button>
 
         <nav className="shell__nav" aria-label="Main">
-          {NAV.map((item) => (
+          {nav.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}
@@ -51,7 +64,10 @@ export default function AppShell() {
         </nav>
 
         <div className="shell__aside">
-          <span className="shell__user">{user?.name || "User"}</span>
+          <span className="shell__user">
+            {user?.name || "User"}
+            {user?.role ? ` · ${user.role === "ADMIN" ? "Admin" : "Member"}` : ""}
+          </span>
           <button type="button" className="shell__signout" onClick={handleSignOut}>
             Sign out
           </button>
@@ -61,6 +77,7 @@ export default function AppShell() {
       <main className="shell__main">
         <Outlet />
       </main>
+      <ScheduledPublishNotifier />
     </div>
   );
 }
